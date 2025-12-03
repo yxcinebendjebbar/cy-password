@@ -1,11 +1,10 @@
-// src/App.jsx
 import React from 'react';
 
 function App() {
   return (
-    <div>
-      <h1>Password Manager Frontend 🚀</h1>
-      <p>Working...</p>
+    <div style={{ padding: '50px', textAlign: 'center' }}>
+      <h1>🚀 Frontend is Working!</h1>
+      <p>System Status: Online</p>
     </div>
   );
 }
