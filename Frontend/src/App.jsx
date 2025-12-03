@@ -5,14 +5,14 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* الصفحة الرئيسية توجهك للتسجيل تلقائياً */}
+        {/* Redirect root URL to Register page automatically */}
         <Route path="/" element={<Navigate to="/register" />} />
         
-        {/* صفحة التسجيل */}
+        {/* Register Page Route */}
         <Route path="/register" element={<Register />} />
         
-        {/* صفحة الدخول (سنبنيها لاحقاً، حالياً نضع نص مؤقت) */}
-        <Route path="/login" element={<h1>صفحة تسجيل الدخول قريباً...</h1>} />
+        {/* Login Page Route (Placeholder for now) */}
+        <Route path="/login" element={<h1 style={{textAlign: 'center', marginTop: '50px'}}>Login Page Coming Soon...</h1>} />
       </Routes>
     </BrowserRouter>
   );
