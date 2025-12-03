@@ -1,11 +1,20 @@
-import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Register from './pages/Register';
 
 function App() {
   return (
-    <div style={{ textAlign: 'center', marginTop: '50px' }}>
-      <h1>🎉 Hello! Frontend is Working</h1>
-      <p>أهلاً بك في مشروع مدير كلمات المرور</p>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        {/* الصفحة الرئيسية توجهك للتسجيل تلقائياً */}
+        <Route path="/" element={<Navigate to="/register" />} />
+        
+        {/* صفحة التسجيل */}
+        <Route path="/register" element={<Register />} />
+        
+        {/* صفحة الدخول (سنبنيها لاحقاً، حالياً نضع نص مؤقت) */}
+        <Route path="/login" element={<h1>صفحة تسجيل الدخول قريباً...</h1>} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
