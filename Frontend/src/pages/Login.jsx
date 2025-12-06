@@ -44,8 +44,8 @@ const Login = () => {
             <div className="relative bg-white/10 backdrop-blur-lg border border-white/20 p-8 rounded-2xl shadow-2xl w-full max-w-md mx-4">
                 
                 <div className="text-center mb-8">
-                    <div className="inline-block p-4 rounded-full bg-gradient-to-tr from-green-500 to-emerald-600 mb-4 shadow-lg">
-                        <FaUnlock className="text-3xl text-white" />
+                    <div className="mb-6 animate-float">
+                        <img src="/logo.png" alt="Logo" className="w-24 h-24 mx-auto drop-shadow-2xl" />
                     </div>
                     <h2 className="text-3xl font-bold text-white tracking-wide">Welcome Back</h2>
                 </div>
