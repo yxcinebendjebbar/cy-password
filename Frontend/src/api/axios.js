@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // 👇 التغيير هنا: نستخدم رابط جهازك المحلي
-const BASE_URL = "http://localhost:5000/api"; 
+const BASE_URL = "https://cy-password.onrender.com/api";
 
 const api = axios.create({
     baseURL: BASE_URL
