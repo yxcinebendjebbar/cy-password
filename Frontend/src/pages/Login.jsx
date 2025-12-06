@@ -1,40 +1,35 @@
 import { useState } from 'react';
 import api from '../api/axios';
 import { useNavigate, Link } from 'react-router-dom';
-import { FaUnlock, FaLock, FaEnvelope, FaArrowRight } from 'react-icons/fa';
+import { toast } from 'react-toastify';
+import { FaUnlock, FaLock, FaEnvelope, FaArrowRight, FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setError('');
 
         try {
-            // 1. إرسال طلب الدخول
             const res = await api.post('/user/login', {
                 email: email,
                 masterPasswordHash: password 
             });
 
-            // 2. حفظ التوكن (للباك إند)
             localStorage.setItem('auth-token', res.data.token);
-
-            // 3. حفظ مفتاح التشفير (للفرونت إند) - مهم جداً لفك التشفير
-            // نستخدم sessionStorage ليمسح تلقائياً عند إغلاق المتصفح للأمان
             sessionStorage.setItem('encryption-key', password);
 
-            // 4. التوجيه للخزنة
+            toast.success("🔓 Welcome back! Vault unlocked.");
             navigate('/dashboard');
 
         } catch (err) {
             const msg = err.response?.data || "Invalid Email or Password";
-            setError(msg);
+            toast.error(msg);
         } finally {
             setLoading(false);
         }
@@ -43,7 +38,6 @@ const Login = () => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-slate-900 overflow-hidden relative">
             
-            {/* Background Animations */}
             <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
             <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
 
@@ -54,14 +48,7 @@ const Login = () => {
                         <FaUnlock className="text-3xl text-white" />
                     </div>
                     <h2 className="text-3xl font-bold text-white tracking-wide">Welcome Back</h2>
-                    <p className="text-slate-400 mt-2 text-sm">Unlock your secure vault</p>
                 </div>
-
-                {error && (
-                    <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-200 text-sm text-center">
-                        {error}
-                    </div>
-                )}
 
                 <form onSubmit={handleLogin} className="space-y-6">
                     <div className="relative group">
@@ -73,7 +60,7 @@ const Login = () => {
                             placeholder="Email Address" 
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full pl-10 pr-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-white placeholder-slate-500 transition-all"
+                            className="w-full pl-10 pr-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg focus:outline-none focus:border-emerald-500 text-white placeholder-slate-500 transition-all"
                             required
                         />
                     </div>
@@ -83,13 +70,20 @@ const Login = () => {
                             <FaLock className="text-slate-400 group-focus-within:text-emerald-400 transition-colors" />
                         </div>
                         <input 
-                            type="password" 
+                            type={showPassword ? "text" : "password"}
                             placeholder="Master Password" 
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full pl-10 pr-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-white placeholder-slate-500 transition-all"
+                            className="w-full pl-10 pr-12 py-3 bg-slate-800/50 border border-slate-700 rounded-lg focus:outline-none focus:border-emerald-500 text-white placeholder-slate-500 transition-all"
                             required
                         />
+                         <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white cursor-pointer"
+                        >
+                            {showPassword ? <FaEyeSlash /> : <FaEye />}
+                        </button>
                     </div>
 
                     <button 
@@ -97,15 +91,12 @@ const Login = () => {
                         disabled={loading}
                         className="w-full py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold rounded-lg shadow-lg transform transition hover:scale-[1.02] active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
                     >
-                        {loading ? "Unlocking..." : <><span>Open Vault</span> <FaArrowRight /></>}
+                        {loading ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : <><span>Open Vault</span> <FaArrowRight /></>}
                     </button>
                 </form>
 
                 <div className="mt-8 text-center text-sm text-slate-400">
-                    Don't have an account?{' '}
-                    <Link to="/register" className="text-emerald-400 hover:text-emerald-300 font-semibold hover:underline transition-all">
-                        Create one
-                    </Link>
+                    Don't have an account? <Link to="/register" className="text-emerald-400 hover:text-emerald-300 font-semibold hover:underline">Create one</Link>
                 </div>
             </div>
         </div>
