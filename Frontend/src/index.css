@@ -139,3 +139,151 @@ h2.neon-title {
     background: rgba(0, 234, 255, 0.1);
     box-shadow: 0 0 15px rgba(0, 234, 255, 0.4); 
 }
+
+.glass-nav {
+    background: rgba(0, 10, 50, 0.6);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(0, 234, 255, 0.2);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+
+/* زر الخروج */
+.logout-btn {
+    background: rgba(255, 50, 50, 0.1);
+    color: #ff4d4d;
+    border: 1px solid rgba(255, 50, 50, 0.3);
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.logout-btn:hover {
+    background: rgba(255, 50, 50, 0.2);
+    box-shadow: 0 0 15px rgba(255, 50, 50, 0.4);
+}
+
+/* تقسيم الصفحة (يسار ويمين) */
+.dashboard-layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* لوحة إضافة عنصر جديد (يسار) */
+.add-panel {
+    flex: 1;
+    min-width: 300px;
+    background: rgba(0, 10, 50, 0.4);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 234, 255, 0.3);
+    border-radius: 20px;
+    padding: 25px;
+    height: fit-content;
+    position: sticky;
+    top: 100px; /* ليبقى ثابتاً عند التمرير */
+    box-shadow: 0 0 30px rgba(0, 234, 255, 0.1);
+}
+
+/* شبكة البطاقات (يمين) */
+.vault-grid {
+    flex: 2;
+    min-width: 300px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* تجاوب تلقائي */
+    gap: 20px;
+}
+
+/* بطاقة الباسوورد */
+.vault-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    transition: 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.vault-card:hover {
+    transform: translateY(-5px);
+    border-color: #00eaff;
+    box-shadow: 0 5px 25px rgba(0, 234, 255, 0.15);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+/* رأس البطاقة (الأيقونة والاسم) */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.site-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00eaff, #005f99);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(0, 234, 255, 0.5);
+}
+
+/* منطقة عرض الباسوورد داخل البطاقة */
+.password-display {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.password-text {
+    font-family: 'Courier New', monospace;
+    color: #00eaff;
+    font-weight: bold;
+    letter-spacing: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-right: 10px;
+}
+
+.dots {
+    color: #555;
+    letter-spacing: 2px;
+}
+
+/* أزرار البطاقة الصغيرة */
+.icon-btn {
+    background: transparent;
+    border: none;
+    color: #a0a0b0;
+    cursor: pointer;
+    font-size: 1.1em;
+    padding: 5px;
+    transition: 0.2s;
+}
+.icon-btn:hover { color: #fff; transform: scale(1.1); }
+.icon-btn.copy:hover { color: #00eaff; }
+.icon-btn.eye:hover { color: #ff33cc; }
