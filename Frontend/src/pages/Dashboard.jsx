@@ -3,20 +3,20 @@ import api from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { encryptData, decryptData } from '../utils/encryption';
+// 👇 تأكد من وجود FaEye و FaEyeSlash في هذا السطر
 import { FaSignOutAlt, FaPlus, FaCopy, FaGlobe, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Dashboard = () => {
     const [passwords, setPasswords] = useState([]);
     const [loading, setLoading] = useState(true);
     
-    // Form States
     const [siteName, setSiteName] = useState('');
     const [siteUrl, setSiteUrl] = useState('');
     const [password, setPassword] = useState('');
-    const [showFormPassword, setShowFormPassword] = useState(false); // للعين في نموذج الإضافة
+    const [showFormPassword, setShowFormPassword] = useState(false); 
     const [adding, setAdding] = useState(false);
 
-    // 👇 حالة جديدة: لتخزين "آيدي" البطاقة التي نريد كشف باسووردها حالياً
+    // 👇 هذا المتغير هو المسؤول عن معرفة أي بطاقة مفتوحة
     const [visiblePasswordId, setVisiblePasswordId] = useState(null);
 
     const navigate = useNavigate();
@@ -80,16 +80,15 @@ const Dashboard = () => {
         }
     };
 
-    // 👇 دالة جديدة لتبديل رؤية الباسوورد داخل البطاقة
+    // 👇 دالة تبديل الرؤية
     const toggleCardPassword = (id) => {
         if (visiblePasswordId === id) {
-            setVisiblePasswordId(null); // إخفاء إذا كان مفتوحاً
+            setVisiblePasswordId(null);
         } else {
-            setVisiblePasswordId(id); // إظهار هذا العنصر
+            setVisiblePasswordId(id);
         }
     };
 
-    // 👇 دالة مساعدة لفك التشفير وعرضه في البطاقة
     const getDecryptedPassword = (encryptedData) => {
         return decryptData(encryptedData, secretKey);
     };
@@ -115,7 +114,7 @@ const Dashboard = () => {
 
             <main className="relative z-10 container mx-auto px-4 py-8 flex flex-col lg:flex-row gap-8">
                 
-                {/* Left Side: Add Form */}
+                {/* Form Section */}
                 <div className="w-full lg:w-1/3">
                     <div className="bg-slate-800/50 backdrop-blur-md border border-white/10 p-6 rounded-2xl sticky top-24">
                         <h2 className="text-xl font-bold mb-6 flex items-center gap-2"><FaPlus className="text-blue-400" /> Add New Item</h2>
@@ -143,7 +142,7 @@ const Dashboard = () => {
                     </div>
                 </div>
 
-                {/* Right Side: Vault Cards */}
+                {/* Vault Grid */}
                 <div className="w-full lg:w-2/3">
                     <div className="flex justify-between items-end mb-6">
                         <h2 className="text-2xl font-bold">My Vault</h2>
@@ -157,7 +156,6 @@ const Dashboard = () => {
                         {passwords.map((item) => (
                             <div key={item._id} className="group bg-slate-800/40 hover:bg-slate-800/80 border border-white/5 hover:border-blue-500/30 p-5 rounded-xl transition-all duration-300">
                                 
-                                {/* Card Header */}
                                 <div className="flex justify-between items-start mb-4">
                                     <div className="flex items-center gap-3">
                                         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center text-lg font-bold border border-white/10">
@@ -174,17 +172,17 @@ const Dashboard = () => {
                                     </div>
                                 </div>
                                 
-                                {/* Card Footer: Password Display & Actions */}
+                                {/* 👇👇 هنا المنطقة المهمة التي كانت ناقصة */}
                                 <div className="bg-black/20 rounded-lg p-3 flex justify-between items-center group-hover:bg-black/40 transition-colors h-12">
                                     
-                                    {/* هنا السحر: إما نعرض النص أو النقاط */}
-                                    <div className="font-mono text-sm truncate mr-2 select-all">
+                                    {/* عرض الباسوورد أو النقاط */}
+                                    <div className="font-mono text-sm truncate mr-2 select-all flex-1">
                                         {visiblePasswordId === item._id ? (
-                                            <span className="text-emerald-400 font-bold">
+                                            <span className="text-emerald-400 font-bold tracking-wider">
                                                 {getDecryptedPassword(item.encryptedData)}
                                             </span>
                                         ) : (
-                                            <div className="flex gap-1 mt-1">
+                                            <div className="flex gap-1 items-center h-full">
                                                 {[...Array(8)].map((_, i) => (
                                                     <div key={i} className="w-1.5 h-1.5 rounded-full bg-slate-500"></div>
                                                 ))}
@@ -192,13 +190,13 @@ const Dashboard = () => {
                                         )}
                                     </div>
 
-                                    {/* أزرار الإجراءات */}
-                                    <div className="flex gap-1">
+                                    {/* الأزرار (العين والنسخ) */}
+                                    <div className="flex gap-1 items-center">
                                         {/* زر العين */}
                                         <button 
                                             onClick={() => toggleCardPassword(item._id)}
                                             className="text-slate-400 hover:text-white p-2 hover:bg-white/10 rounded-lg transition-all"
-                                            title={visiblePasswordId === item._id ? "Hide Password" : "Show Password"}
+                                            title={visiblePasswordId === item._id ? "Hide" : "Show"}
                                         >
                                             {visiblePasswordId === item._id ? <FaEyeSlash /> : <FaEye />}
                                         </button>
@@ -207,12 +205,14 @@ const Dashboard = () => {
                                         <button 
                                             onClick={() => copyToClipboard(item.encryptedData)}
                                             className="text-slate-400 hover:text-white p-2 hover:bg-white/10 rounded-lg transition-all"
-                                            title="Copy Password"
+                                            title="Copy"
                                         >
                                             <FaCopy />
                                         </button>
                                     </div>
                                 </div>
+                                {/* 👆👆 نهاية المنطقة المهمة */}
+
                             </div>
                         ))}
                     </div>
