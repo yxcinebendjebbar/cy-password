@@ -3,7 +3,8 @@ import api from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { encryptData, decryptData } from '../utils/encryption';
-import { FaSignOutAlt, FaPlus, FaCopy, FaSearch, FaGlobe, FaLock } from 'react-icons/fa';
+// 👇 1. تمت إضافة FaEye و FaEyeSlash هنا
+import { FaSignOutAlt, FaPlus, FaCopy, FaSearch, FaGlobe, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Dashboard = () => {
     const [passwords, setPasswords] = useState([]);
@@ -13,22 +14,22 @@ const Dashboard = () => {
     const [siteName, setSiteName] = useState('');
     const [siteUrl, setSiteUrl] = useState('');
     const [password, setPassword] = useState('');
+    
+    // 👇 2. حالة جديدة لإظهار/إخفاء الباسوورد
+    const [showPassword, setShowPassword] = useState(false);
+    
     const [adding, setAdding] = useState(false);
 
     const navigate = useNavigate();
-
-    // 1. جلب مفتاح التشفير من الذاكرة المؤقتة
     const secretKey = sessionStorage.getItem('encryption-key');
 
-    // 2. دالة الخروج (Logout)
     const handleLogout = () => {
         localStorage.removeItem('auth-token');
-        sessionStorage.removeItem('encryption-key'); // نمسح المفتاح للأمان
+        sessionStorage.removeItem('encryption-key');
         toast.info("👋 Logged out successfully");
         navigate('/login');
     };
 
-    // 3. دالة جلب البيانات من السيرفر
     const fetchVault = async () => {
         try {
             const res = await api.get('/vault/all');
@@ -40,7 +41,6 @@ const Dashboard = () => {
         }
     };
 
-    // تشغيل عند فتح الصفحة
     useEffect(() => {
         if (!secretKey) {
             toast.error("Security Key missing! Please login again.");
@@ -50,14 +50,12 @@ const Dashboard = () => {
         }
     }, []);
 
-    // 4. دالة إضافة باسوورد جديد
     const handleAdd = async (e) => {
         e.preventDefault();
         if (!siteName || !password) return toast.warning("Please fill required fields");
 
         setAdding(true);
         try {
-            // التشفير في الفرونت إند!
             const { encryptedData, iv } = encryptData(password, secretKey);
 
             await api.post('/vault/add', {
@@ -71,7 +69,7 @@ const Dashboard = () => {
             setSiteName('');
             setSiteUrl('');
             setPassword('');
-            fetchVault(); // تحديث القائمة
+            fetchVault();
         } catch (error) {
             toast.error("Failed to save password");
         } finally {
@@ -79,10 +77,7 @@ const Dashboard = () => {
         }
     };
 
-    // 5. دالة النسخ (فك التشفير ثم النسخ)
     const copyToClipboard = (encryptedData, iv) => {
-        // إذا كان الباك إند يرسل الـ IV بشكل منفصل نستخدمه، وإلا فالتشفير يحتوي عليه
-        // ملاحظة: دالتنا decryptData ذكية وتعرف كيف تتعامل
         const originalPass = decryptData(encryptedData, secretKey);
         
         if (originalPass) {
@@ -130,7 +125,7 @@ const Dashboard = () => {
                             <div>
                                 <label className="text-slate-400 text-sm block mb-1">Site Name</label>
                                 <input 
-                                    className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 focus:border-blue-500 focus:outline-none transition-colors"
+                                    className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 focus:border-blue-500 focus:outline-none transition-colors text-white"
                                     placeholder="e.g. Facebook"
                                     value={siteName}
                                     onChange={e => setSiteName(e.target.value)}
@@ -139,22 +134,34 @@ const Dashboard = () => {
                             <div>
                                 <label className="text-slate-400 text-sm block mb-1">Website URL (Optional)</label>
                                 <input 
-                                    className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 focus:border-blue-500 focus:outline-none transition-colors"
+                                    className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 focus:border-blue-500 focus:outline-none transition-colors text-white"
                                     placeholder="https://..."
                                     value={siteUrl}
                                     onChange={e => setSiteUrl(e.target.value)}
                                 />
                             </div>
+                            
+                            {/* 👇 3. حقل الباسوورد المعدل مع زر العين */}
                             <div>
                                 <label className="text-slate-400 text-sm block mb-1">Password</label>
-                                <input 
-                                    type="password"
-                                    className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 focus:border-blue-500 focus:outline-none transition-colors"
-                                    placeholder="Secret Password"
-                                    value={password}
-                                    onChange={e => setPassword(e.target.value)}
-                                />
+                                <div className="relative">
+                                    <input 
+                                        type={showPassword ? "text" : "password"}
+                                        className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 pr-10 focus:border-blue-500 focus:outline-none transition-colors text-white"
+                                        placeholder="Secret Password"
+                                        value={password}
+                                        onChange={e => setPassword(e.target.value)}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-3.5 text-slate-400 hover:text-white transition-colors"
+                                    >
+                                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                    </button>
+                                </div>
                             </div>
+
                             <button 
                                 disabled={adding}
                                 className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 py-3 rounded-lg font-bold shadow-lg transition-all active:scale-95 disabled:opacity-50"
