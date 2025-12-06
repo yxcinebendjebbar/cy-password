@@ -1,17 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ---- الأنماط العامة ---- */
 body {
-    background-color: #0f172a;
-    color: white;
-}
-@keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
+    font-family: 'Poppins', sans-serif; 
+    background: linear-gradient(135deg, #05051a 0%, #150030 100%); 
+    color: #f0f0f0;
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
 }
 
-.animate-float {
-    animation: float 3s ease-in-out infinite;
+/* حاوية التوسيط (لضمان أن البطاقة في الوسط دائماً) */
+#root {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* ---- الحاوية الزجاجية (The Card) ---- */
+.auth-container {
+    background-color: rgba(0, 10, 50, 0.4); 
+    backdrop-filter: blur(12px) saturate(150%); 
+    border-radius: 25px;
+    box-shadow: 0 0 50px rgba(255, 255, 255, 0.15), 0 0 20px #00eaff; 
+    width: 100%;
+    max-width: 450px; 
+    padding: 40px;
+    border: 2px solid rgba(0, 234, 255, 0.3); 
+    text-align: center;
+    margin: 20px;
+    animation: floatIn 0.8s ease-out;
+}
+
+@keyframes floatIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- العناوين ---- */
+h2.neon-title {
+    color: #00eaff; 
+    font-size: 2.5em;
+    font-weight: 900;
+    margin-bottom: 10px;
+    text-shadow: 0 0 15px rgba(0, 234, 255, 0.8);
+    border-bottom: 2px solid rgba(255, 51, 204, 0.5); 
+    padding-bottom: 15px;
+    display: inline-block;
+    width: 100%;
+}
+
+.subtitle {
+    color: #a0a0b0;
+    margin-bottom: 30px;
+    font-size: 1rem;
+}
+
+/* ---- حقول الإدخال ---- */
+.input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    background-color: rgba(0, 0, 0, 0.3); 
+    border: 1px solid rgba(0, 234, 255, 0.3);
+    box-shadow: inset 0 0 15px rgba(0, 234, 255, 0.2);
+    transition: 0.3s;
+    padding: 5px 15px;
+}
+
+.input-group:focus-within {
+    border-color: #ff33cc;
+    box-shadow: inset 0 0 15px rgba(255, 51, 204, 0.4), 0 0 20px rgba(255, 51, 204, 0.5);
+}
+
+.input-group .icon {
+    color: #ff33cc; 
+    font-size: 1.2em;
+    margin-right: 15px;
+    padding-right: 15px;
+    border-right: 1px solid rgba(0, 234, 255, 0.1);
+}
+
+.input-group input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+    padding: 10px 0;
+    outline: none;
+}
+
+/* ---- الأزرار ---- */
+.primary-btn {
+    width: 100%;
+    padding: 15px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 30px; 
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.1em;
+    text-transform: uppercase;
+    background: linear-gradient(45deg, #00eaff, #ff33cc); 
+    color: #1a1a2e; 
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.2), 0 0 15px #00eaff; 
+    transition: 0.3s;
+}
+
+.primary-btn:hover {
+    background: linear-gradient(45deg, #ff33cc, #00eaff);
+    transform: scale(1.02); 
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.4), 0 0 20px #ff33cc; 
+}
+
+.secondary-btn {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    background: transparent;
+    border: 1px solid #00eaff;
+    color: #00eaff;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.secondary-btn:hover {
+    background: rgba(0, 234, 255, 0.1);
+    box-shadow: 0 0 15px rgba(0, 234, 255, 0.4); 
 }
